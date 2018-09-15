@@ -1,0 +1,33 @@
+version: '3'
+services:
+    txapp:
+        image: golang
+        volumes:
+          - ./app/:/go/src/github.com/syariatifaris/shopeetax/app/
+        working_dir: /go/src/github.com/syariatifaris/shopeetax/app/
+        command: 'make docker-run'
+        expose:
+          - '9090'
+        ports:
+          - '9091:9090'
+        depends_on:
+          - mysqldb
+        networks:
+          - shopeetaxnet
+    mysqldb:
+      image: mysql:5.7
+      env_file: .env
+      environment:
+          MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+          MYSQL_DATABASE: ${MYSQL_DATABASE}
+          MYSQL_USER: ${MYSQL_USER}
+          MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      ports:
+        - "9096:3306"
+      volumes:
+        - ./db/:/docker-entrypoint-initdb.d
+        # - ${MYSQL_PERSISTENT_VOL}:/var/lib/mysql
+      networks:
+        - shopeetaxnet
+networks:
+    shopeetaxnet:
