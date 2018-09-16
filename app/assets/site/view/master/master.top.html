@@ -1,0 +1,25 @@
+{{define "masterTop"}}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Shopee - {{.SiteTitle}}</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="{{.MasterPage.CSSPageFile}}" rel="stylesheet" />
+    <script src="/site/js/plugins/jquery/jquery-3.3.1.min.js" />
+    <script src="/site/js/master/main.js" />
+    <script type="text/javascript">
+        initTxJsonObj("{{.MasterPage.JSObjects}}")
+    </script>
+    <script src="{{.MasterPage.JSPageFile}}"></script>
+</head>
+<body>
+<div>
+    <h2>{{.PageTitle}}</h2>
+    <hr/>
+</div>
+{{end}}

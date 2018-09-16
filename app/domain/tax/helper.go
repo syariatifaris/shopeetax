@@ -2,9 +2,9 @@ package tax
 
 import (
 	"fmt"
-	"github.com/Knetic/govaluate"
 	"strings"
 
+	"github.com/Knetic/govaluate"
 	taxmodel "github.com/syariatifaris/shopeetax/app/model/tax"
 )
 
@@ -41,4 +41,13 @@ func CalculateTax(input *TaxableProductInput, taxes map[int64]*taxmodel.Tax) (*t
 	}
 	taxProduct.TotalPrice = taxProduct.Price + taxProduct.TaxPrice
 	return taxProduct, nil
+}
+
+//GetTaxCategoryCode gets tax category code
+func GetTaxCategoryCode(id int64, taxes map[int64]*taxmodel.Tax) (string, error) {
+	tax, ok := taxes[id]
+	if !ok {
+		return "", fmt.Errorf("unable to get tax code for id %d", id)
+	}
+	return tax.Code, nil
 }

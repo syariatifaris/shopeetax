@@ -1,7 +1,7 @@
 [Database]
-    Host = "mysqldb"
+    Host = "127.0.0.1"
     Type = "mysql"
     Name = "shopee.db"
     User = "shopee.user"
     Password = "shopee2018"
-    Port = 3306
+    Port = 9096

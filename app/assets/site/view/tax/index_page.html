@@ -1,0 +1,44 @@
+{{template "masterTop" .}}
+<div>
+    <p>
+        <table border="1px solid">
+            <thead>
+                <td>Fields</td>
+                <td>Input</td>
+            </thead>
+            <tbody>
+                <tr>
+                    <td> Product Name:</td>
+                    <td> <input id="add-product-name" type="text" placeholder="i.e: big mac" /></td>
+                </tr>
+                <tr>
+                    <td>Tax Code:</td>
+                    <td> <input id="add-tax-cat-id" type="number" placeholder="i.e: 1, 2, 3" /></td>
+                </tr>
+                <tr>
+                    <td>Amount:</td>
+                    <td> <input id="add-tax-amount" type="number" placeholder="i.e: 10000" /></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td> <input id="add-submit" type="button" value="Add Taxable Product" onclick="addTaxableProduct()"/></td>
+                </tr>
+            </tbody>
+    </p>
+</div>
+<div>
+    <p>
+        <table border="1px solid">
+            <thead>
+                <td>Name</td>
+                <td>Tax Code</td>
+                <td>Type</td>
+                <td>Amount</td>
+                <td>Tax Amount</td>
+                <td>Total Amount</td>
+            </thead>
+            <tbody id="taxable-products-body"></tbody>
+        </table>
+    </p>
+</div>
+{{template "masterBottom" .}}

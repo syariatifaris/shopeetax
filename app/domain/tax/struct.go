@@ -14,6 +14,11 @@ type InsertTaxResponse struct {
 	TaxableProduct *taxmodel.TaxableProduct `json:"taxable_product"`
 }
 
+//GetTaxableProductsResponse response structure
+type GetTaxableProductsResponse struct {
+	TaxableProducts []*taxmodel.TaxableProduct `json:"taxable_products"`
+}
+
 //TaxableProductInput structure
 type TaxableProductInput struct {
 	ProductName   string  `json:"product_name"`

@@ -28,6 +28,7 @@ func InitShopeeHTTPServer(ui *uires.UIResource, port int) Server {
 
 //Run runs the server
 func (h *httpServer) Run() error {
+	h.ui.SetupView()
 	h.registerRouters()
 	//run server
 	return gracehttp.Serve(&http.Server{
@@ -38,6 +39,8 @@ func (h *httpServer) Run() error {
 
 func (h *httpServer) registerRouters() {
 	h.router.HandlerFunc(http.MethodPost, "/shopee/tax/insert", h.handle(h.ui, api.InsertTaxHandler, taxusecase.GetHandleInsertTax()))
+	h.router.HandlerFunc(http.MethodPost, "/shopee/tax/get_taxable_products", h.handle(h.ui, api.GetTaxableProductsHandler, taxusecase.GetHandleGetTaxableProduct()))
+	h.router.HandlerFunc(http.MethodGet, "/shopee/tax/index", h.handleView(h.ui, api.IndexPage, nil))
 }
 
 //handle handles middleware to run handler-usecase coupled
@@ -56,5 +59,19 @@ func (h *httpServer) handle(uiRes *uires.UIResource, httpHandlerFunc httpHandler
 			return
 		}
 		h.ui.RenderJSON(writer, response, http.StatusOK)
+	}
+}
+
+//handleView handles middleware to run handler-usecase coupled with render view
+//args:
+//	uiRes: ui resouece
+//	httpHandleFunc: anon function for http handler
+//	useCase: use case anon function
+//	subscribers event subscribed usecase
+//returns:
+//	http.HandlerFunc: anon function for http handler
+func (h *httpServer) handleView(uiRes *uires.UIResource, httpHandlerViewFunc httpHandlerViewFunc, useCase usecase.HandleUseCase, subscribers ...usecase.UseCase) http.HandlerFunc {
+	return func(writer http.ResponseWriter, request *http.Request) {
+		httpHandlerViewFunc(uiRes, request, writer, useCase, subscribers...)
 	}
 }

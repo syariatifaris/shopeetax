@@ -11,6 +11,9 @@ import (
 //httpHandlerFunc abstraction of http handler
 type httpHandlerFunc func(ui *uires.UIResource, request *http.Request, useCase usecase.HandleUseCase, subscribers ...usecase.UseCase) (interface{}, error)
 
+//httpHandlerViewFunc abstraction of http handler with view
+type httpHandlerViewFunc func(ui *uires.UIResource, request *http.Request, writer http.ResponseWriter, useCase usecase.HandleUseCase, subscribers ...usecase.UseCase)
+
 //Server contract
 type Server interface {
 	Run() error

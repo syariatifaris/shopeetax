@@ -63,6 +63,11 @@ func (c *insertTaxUseCase) HandleUseCase(ctx context.Context, res *usecaseres.Us
 	if err != nil {
 		return nil, err
 	}
+	code, err := taxdomain.GetTaxCategoryCode(request.TaxProduct.TaxCategoryID, res.TaxRepo.GetHolders().TaxRules)
+	if err != nil {
+		return nil, err
+	}
+	taxable.TaxCode = code
 	return &taxdomain.InsertTaxResponse{
 		TaxableProduct: taxable,
 	}, nil

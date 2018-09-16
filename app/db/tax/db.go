@@ -38,6 +38,7 @@ func GetTaxRepo(ctx context.Context, res *repores.RepoResource) Repo {
 type Repo interface {
 	GetTaxes(context.Context) ([]*taxmodel.Tax, error)
 	GetComponents(context.Context) ([]*taxmodel.Component, error)
+	GetTaxableProducts(context.Context) ([]*taxmodel.TaxableProduct, error)
 	InsertTaxableProduct(context.Context, *sqlx.Tx, *taxmodel.TaxableProduct) error
 	GetHolders() *Holder
 	db.RepoDB
@@ -70,6 +71,15 @@ func (t *taxRepo) GetComponents(ctx context.Context) ([]*taxmodel.Component, err
 		return nil, err
 	}
 	return components, nil
+}
+
+func (t *taxRepo) GetTaxableProducts(ctx context.Context) ([]*taxmodel.TaxableProduct, error) {
+	var taxableProducts []*taxmodel.TaxableProduct
+	err := t.ShopeeDB.SelectContext(ctx, &taxableProducts, getTaxableProductsQuery)
+	if err != nil {
+		return nil, err
+	}
+	return taxableProducts, nil
 }
 
 func (t *taxRepo) InsertTaxableProduct(ctx context.Context, tx *sqlx.Tx, tp *taxmodel.TaxableProduct) error {
