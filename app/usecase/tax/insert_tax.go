@@ -2,6 +2,7 @@ package tax
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"sync"
 
@@ -49,6 +50,9 @@ func (c *insertTaxUseCase) HandleUseCase(ctx context.Context, res *usecaseres.Us
 	if err != nil {
 		return nil, err
 	}
+	if err = c.validate(request); err != nil {
+		return nil, err
+	}
 	taxable, err := taxdomain.CalculateTax(request.TaxProduct, res.TaxRepo.GetHolders().TaxRules)
 	if err != nil {
 		return nil, err
@@ -80,5 +84,25 @@ func (c *insertTaxUseCase) HandleUseCase(ctx context.Context, res *usecaseres.Us
 //return error state
 func (c *insertTaxUseCase) Notify(ctx context.Context, res *usecaseres.UseCaseResource, data *usecase.UseCaseData) error {
 	fmt.Println("notify on insert tax use case")
+	return nil
+}
+
+func (c *insertTaxUseCase) validate(request *taxdomain.InsertTaxRequest) error {
+	var errs []error
+	if request == nil {
+		return errors.New("unable to get request, request nil")
+	}
+	if request.TaxProduct.InitialPrice <= 0 {
+		errs = append(errs, errors.New("invalid initial price"))
+	}
+	if len(request.TaxProduct.ProductName) == 0 {
+		errs = append(errs, errors.New("invalid product name"))
+	}
+	if request.TaxProduct.TaxCategoryID <= 0 {
+		errs = append(errs, errors.New("invalid tax type"))
+	}
+	if len(errs) > 0 {
+		return fmt.Errorf("%+v", errs)
+	}
 	return nil
 }
