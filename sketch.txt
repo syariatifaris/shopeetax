@@ -3,6 +3,7 @@ id
 code
 name
 expression
+min_price
 
 shopee_taxable_product
 id
@@ -15,3 +16,4 @@ id
 code
 desc
 type
+

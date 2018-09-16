@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -69,7 +70,8 @@ func initRepoResource(cfg *config.ConfigurationData) *repores.RepoResource {
 //	UsecaseResource: usecase reosource object
 func initUseCaseResource(res *repores.RepoResource, cfg *config.ConfigurationData) *usecaseres.UseCaseResource {
 	return &usecaseres.UseCaseResource{
-		Config:  cfg,
-		TaxRepo: taxdb.GetTaxRepo(res),
+		Config:             cfg,
+		TaxRepo:            taxdb.GetTaxRepo(context.Background(), res),
+		ExecuteTransaction: db.ExecuteInTx,
 	}
 }

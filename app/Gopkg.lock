@@ -8,6 +8,12 @@
   version = "v0.3.0"
 
 [[projects]]
+  name = "github.com/Knetic/govaluate"
+  packages = ["."]
+  revision = "d216395917cc49052c7c7094cf57f09657ca08a8"
+  version = "v3.0.0"
+
+[[projects]]
   branch = "master"
   name = "github.com/facebookgo/clock"
   packages = ["."]
@@ -58,6 +64,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "7609d8ac08f7a5e408e964fcc802666d43f55c75819d97e134900ea5161c477d"
+  inputs-digest = "082ac387dddf79b24b69624e6a08c852c7535967d516d3504f78df073b7ce13d"
   solver-name = "gps-cdcl"
   solver-version = 1

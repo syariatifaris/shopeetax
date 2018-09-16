@@ -5,6 +5,9 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+//ExecuteTransactionFunc contract
+type ExecuteTransactionFunc func(context.Context, *sqlx.Tx, func() error) error
+
 //RepoDB base repository database contract
 type RepoDB interface {
 	BeginTransaction() (*sqlx.Tx, error)

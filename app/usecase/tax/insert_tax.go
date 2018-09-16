@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"sync"
 
+	taxdomain "github.com/syariatifaris/shopeetax/app/domain/tax"
 	"github.com/syariatifaris/shopeetax/app/resource/usecaseres"
 	"github.com/syariatifaris/shopeetax/app/usecase"
 )
@@ -43,11 +44,28 @@ func (c *insertTaxUseCase) NotifyResult() interface{} {
 //	res: use case resource
 //	data: use case data
 func (c *insertTaxUseCase) HandleUseCase(ctx context.Context, res *usecaseres.UseCaseResource, data *usecase.UseCaseData) (interface{}, error) {
-	taxes, err := res.TaxRepo.GetTaxes(ctx)
+	var request *taxdomain.InsertTaxRequest
+	err := data.Cast(&request)
 	if err != nil {
 		return nil, err
 	}
-	return taxes, nil
+	taxable, err := taxdomain.CalculateTax(request.TaxProduct, res.TaxRepo.GetHolders().TaxRules)
+	if err != nil {
+		return nil, err
+	}
+	tx, err := res.TaxRepo.BeginTransaction()
+	if err != nil {
+		return nil, err
+	}
+	err = res.ExecuteTransaction(ctx, tx, func() error {
+		return res.TaxRepo.InsertTaxableProduct(ctx, tx, taxable)
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &taxdomain.InsertTaxResponse{
+		TaxableProduct: taxable,
+	}, nil
 }
 
 //Notify notifies this usecase when something happen from other use case
