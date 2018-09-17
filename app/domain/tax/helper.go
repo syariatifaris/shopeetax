@@ -43,6 +43,21 @@ func CalculateTax(input *TaxableProductInput, taxes map[int64]*taxmodel.Tax) (*t
 	return taxProduct, nil
 }
 
+//CalculateProductSummary calculates taxable product summary
+func CalculateProductSummary(products []*taxmodel.TaxableProduct) *TaxableProductSummary {
+	var totalAmt, totalTaxAmt, grandTotal float64
+	for _, product := range products {
+		totalAmt += product.Price
+		totalTaxAmt += product.TaxPrice
+	}
+	grandTotal = totalAmt + totalTaxAmt
+	return &TaxableProductSummary{
+		GrandTotal:     grandTotal,
+		TotalAmount:    totalAmt,
+		TotalTaxAmount: totalTaxAmt,
+	}
+}
+
 //GetTaxCategoryCode gets tax category code
 func GetTaxCategoryCode(id int64, taxes map[int64]*taxmodel.Tax) (string, error) {
 	tax, ok := taxes[id]

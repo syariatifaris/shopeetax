@@ -1,3 +1,5 @@
+var productSummary
+
 $(document).ready(function(){
     loadTaxableProducts();
 });
@@ -16,8 +18,14 @@ function addTaxableProduct(){
             }
         }), 
         success: function(data){
-            c = buildTaxableTableContent(data.taxable_product);
+            var product = data.taxable_product
+            c = buildTaxableTableContent(product);
             $('#taxable-products-body').append(c);
+            productSummary.total_tax_amount += product.tax_price;
+            productSummary.total_amount += product.price;
+            productSummary.grand_total += product.total_price;
+            console.log(productSummary);
+            loadTaxableSummary();
         },
         error: function(err){
             console.log(err);
@@ -38,18 +46,26 @@ function buildTaxableTableContent(product){
     return content
 }
 
+function loadTaxableSummary(){
+    $("#total-amount").html("<b>"+productSummary.total_amount+"</b>");
+    $("#total-tax-amount").html("<b>"+productSummary.total_tax_amount+"</b>");
+    $("#grand-total").html("<b>"+productSummary.grand_total+"</b>");
+}
+
 function loadTaxableProducts(){
     $.ajax({
         type: "POST",
         url: "/shopee/tax/get_taxable_products",
         dataType: "json",
         success: function(data){
+            productSummary = data.summary
             var contents = ""
             $.each(data.taxable_products, function(i, product){
                 c = buildTaxableTableContent(product);
                 contents += c;
             })
             $('#taxable-products-body').append(contents)
+            loadTaxableSummary();
         }
     })
 }

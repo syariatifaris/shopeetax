@@ -28,8 +28,10 @@ func (g *getTaxableUseCase) Name() string {
 
 func (g *getTaxableUseCase) HandleUseCase(ctx context.Context, res *usecaseres.UseCaseResource, data *usecase.UseCaseData) (interface{}, error) {
 	products, err := res.TaxRepo.GetTaxableProducts(ctx)
+	summary := taxdomain.CalculateProductSummary(products)
 	return &taxdomain.GetTaxableProductsResponse{
 		TaxableProducts: products,
+		Summary:         summary,
 	}, err
 }
 
