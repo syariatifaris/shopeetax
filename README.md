@@ -50,7 +50,7 @@ This table contains calculated tax product snapshot
 
 #### B. Code Structure
 
-I uses the N-Layer design pattern with `observer` patter support. To sustain Golang idiomaticity, I uses a lot of Go `closure` or anonymous function to replace the interface, or factory definition. This is the code structure of project module:
+I uses the N-Layer design pattern with `observer` pattern support. To sustain Golang idiomaticity, I uses a lot of Go `closure` or anonymous function to replace the interface, or factory definition. This is the code structure of project module:
 
 ```
 app
